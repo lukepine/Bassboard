@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bass Fretboard — EADG</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <svg class="logo-icon" aria-label="Bass Fretboard" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="13" width="28" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+          <rect x="2" y="17" width="28" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+          <rect x="2" y="21" width="28" height="2" rx="1" fill="currentColor" opacity="0.7"/>
+          <rect x="2" y="9"  width="28" height="2" rx="1" fill="currentColor" opacity="0.2"/>
+          <rect x="7"  y="6" width="2" height="20" rx="1" fill="currentColor"/>
+          <rect x="13" y="6" width="2" height="20" rx="1" fill="currentColor" opacity="0.6"/>
+          <rect x="19" y="6" width="2" height="20" rx="1" fill="currentColor" opacity="0.6"/>
+          <rect x="25" y="6" width="2" height="20" rx="1" fill="currentColor" opacity="0.6"/>
+          <circle cx="28" cy="5" r="3" fill="var(--color-accent)"/>
+        </svg>
+        <span class="logo-text">BassBoard</span>
+      </div>
+
+      <div class="header-controls">
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <section class="controls-section">
+    <div class="controls-inner">
+
+      <!-- Root note picker -->
+      <div class="control-group">
+        <label class="control-label">Root Note</label>
+        <div class="note-grid" id="rootPicker" role="group" aria-label="Select root note">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <!-- Interval toggles -->
+      <div class="control-group">
+        <label class="control-label">Highlight</label>
+        <div class="interval-toggles" role="group" aria-label="Toggle intervals">
+          <button class="interval-btn active" data-interval="root" style="--btn-color: var(--color-accent)">
+            <span class="interval-dot"></span> Root
+          </button>
+          <button class="interval-btn active" data-interval="third" style="--btn-color: var(--color-third)">
+            <span class="interval-dot"></span> 3rd
+          </button>
+          <button class="interval-btn active" data-interval="fifth" style="--btn-color: var(--color-fifth)">
+            <span class="interval-dot"></span> 5th
+          </button>
+          <button class="interval-btn active" data-interval="octave" style="--btn-color: var(--color-octave)">
+            <span class="interval-dot"></span> Octave
+          </button>
+          <button class="interval-btn active" data-interval="all" style="--btn-color: var(--color-all)">
+            <span class="interval-dot"></span> All Notes
+          </button>
+        </div>
+      </div>
+
+      <!-- Scale type -->
+      <div class="control-group">
+        <label class="control-label">Scale / Chord</label>
+        <div class="scale-tabs" id="scaleTabs" role="group" aria-label="Select scale or chord">
+          <button class="scale-tab active" data-scale="major">Major</button>
+          <button class="scale-tab" data-scale="minor">Minor</button>
+          <button class="scale-tab" data-scale="pentatonic_major">Pent. Maj</button>
+          <button class="scale-tab" data-scale="pentatonic_minor">Pent. Min</button>
+          <button class="scale-tab" data-scale="blues">Blues</button>
+          <button class="scale-tab" data-scale="chromatic">Chromatic</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Fretboard -->
+  <main class="fretboard-section">
+    <div class="fretboard-scroll-wrap">
+      <div class="fretboard-container" id="fretboard" role="img" aria-label="Bass guitar fretboard diagram">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Fret numbers row -->
+    <div class="fret-numbers-wrap">
+      <div class="fret-numbers-row" id="fretNumbers">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Legend -->
+  <section class="legend-section">
+    <div class="legend-inner">
+      <div class="legend-items">
+        <div class="legend-item">
+          <span class="legend-dot legend-root"></span>
+          <span>Root</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-third"></span>
+          <span>Major/Minor 3rd</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-fifth"></span>
+          <span>5th</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-octave"></span>
+          <span>Octave</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-all"></span>
+          <span>Scale Note</span>
+        </div>
+      </div>
+      <p class="legend-hint">Click any dot to see its note name</p>
+    </div>
+  </section>
+
+  <!-- Tooltip -->
+  <div class="note-tooltip" id="noteTooltip" role="tooltip" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>
